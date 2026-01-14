@@ -1,8 +1,8 @@
-name: Validate PR title
+name: PR Title Must Follow Conventional Commits
 
 on:
   pull_request:
-    types: [opened, edited, reopened]
+    types: [opened, edited, reopened, synchronize]
 
 jobs:
   validate-pr-title:
@@ -14,7 +14,32 @@ jobs:
         with:
           node-version: 20
 
-      - name: Validate PR title
+      - name: Check PR title format
         run: node .github/actions/validate-pr-title.js
         env:
           PR_TITLE: ${{ github.event.pull_request.title }}
+
+      - name: Comment on PR if title is invalid
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = context.payload.pull_request.title;
+
+            const body = `❌ **Invalid PR title**
+
+The PR title does not follow **Conventional Commits**.
+
+**Expected format**: \`type(<optional scope>): description\`
+
+**Allowed types**: feat, fix, docs, chore, refactor, test, ci, build, perf
+
+**Actual**: \`${title}\`
+`;
+
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              body,
+            });
