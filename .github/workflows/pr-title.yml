@@ -1,15 +1,17 @@
 name: PR Title Must Follow Conventional Commits
 
+permissions:
+  pull-requests: write
+  contents: read
+
 on:
-  pull_request:
+  pull_request_target:
     types: [opened, edited, reopened, synchronize]
 
 jobs:
   validate-pr-title:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
-
       - uses: actions/setup-node@v6
         with:
           node-version: 20
