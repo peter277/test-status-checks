@@ -28,14 +28,14 @@ jobs:
 
             const body = `❌ **Invalid PR title**
 
-The PR title does not follow **Conventional Commits**.
+            The PR title does not follow **Conventional Commits**.
 
-**Expected format**: \`type(<optional scope>): description\`
+            **Expected format**: \`type(<optional scope>): description\`
 
-**Allowed types**: feat, fix, docs, chore, refactor, test, ci, build, perf
+            **Allowed types**: feat, fix, docs, chore, refactor, test, ci, build, perf
 
-**Actual**: \`${title}\`
-`;
+            **Actual**: \`${title}\`
+            `.replace(/^\s+/gm, "");
 
             await github.rest.issues.createComment({
               owner: context.repo.owner,
