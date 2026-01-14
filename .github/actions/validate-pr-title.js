@@ -9,9 +9,8 @@ if (!title) {
 }
 
 if (!regex.test(title)) {
-    console.error("❌ PR title does not follow Conventional Commits");
-    console.error("Expected: type(scope?): description");
-    console.error(`Actual: ${title}`);
+    console.error(`::error title=Invalid PR title::"${title}" does not follow Conventional Commits`);
+    console.error("::error::Expected format: type(<optional scope>): description");
     process.exit(1);
 }
 
